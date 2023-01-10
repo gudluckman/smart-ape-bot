@@ -34,19 +34,19 @@ client.once('ready', () => {
 });
 
 client.on('messageCreate', async function(message) {
-    // non AI
-    if (message.author.bot || !message.content.startsWith(prefix)) {
-        enableAI();
-    }
+    // Priorities the commands startswith prefix (>) but if theres not prefix,
+    // then bot would switch to AI mode
+
+    // BOT SECTION
+    if (message.author.bot || !message.content.startsWith(prefix)) enableAI();
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
     if(!client.commands.has(command)) return;
-
     client.commands.get(command).execute(message, args);
-    // non AI
-
+    
+    // AI SECTION
     async function enableAI() {
         try {
             if(message.author.bot) return;
@@ -62,12 +62,13 @@ client.on('messageCreate', async function(message) {
                 stop: ["smart-ape-bot:", "Luckman:"],
             })
             message.reply(`${gptResponse.data.choices[0].text}`);
-            console.log("chatGPT bot call");
+            console.log("~~ chatGPT CALL");
             return;
         } catch(err){
             console.log(err);
         }
     }
 }); 
+
 
 client.login(process.env.DISCORD_TOKEN);
