@@ -1,6 +1,6 @@
 # smart-ape-bot
 
-### I am experimenting with ChatGPT, NodeJS, and making API calls from numerous APIs in this project. In the end, the information collected through the API is posted through Discord.
+#### I am experimenting with ChatGPT, NodeJS, and making API calls from numerous APIs in this project. In the end, the information collected through the API is posted through Discord.
 
 ## Details
 
