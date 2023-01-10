@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
-let modeType = 0;
+let modeType = 'DEFAULT';
 
 // Setting Up ChatGPT
 const { Client, Collection, GatewayIntentBits, Presence } = require('discord.js');
@@ -39,20 +39,20 @@ client.once('ready', () => {
 client.on('messageCreate', async function(message) {
     // BOT SECTION
     if (message.author.bot || !message.content.startsWith(prefix)) {
-        if (message.content.startsWith('$info')) {
-            message.reply('Switching to Informative Mode'); 
-            modeType = 1;
+        if (message.content.startsWith('$troll')) {
+            message.reply('Switching to Troll Mode'); 
+            modeType = 'TROLL';
             return;
         }
         
-        if (message.content.startsWith('$friendly')) {
-            message.reply('Switching to Friendly Mode'); 
-            modeType = 2;
+        if (message.content.startsWith('$general')) {
+            message.reply('Switching to General Mode'); 
+            modeType = 'GENERAL';
             return;
         }
 
-        if (modeType === 1) enableAI();
-        if (modeType === 2 || modeType === 0) enableFriendly();
+        if (modeType === 'TROLL') enableTroll();
+        if (modeType === 'GENERAL' || modeType === 'DEFAULT') enableAI();
     }
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -76,7 +76,7 @@ client.on('messageCreate', async function(message) {
             });
 
             message.reply(`${gptResponse.data.choices[0].text}`);
-            console.log("chatGPT_INFO CALL");
+            console.log("chatGPT_GENERAL RESPONSE");
             return;
 
         } catch(error){
@@ -84,21 +84,21 @@ client.on('messageCreate', async function(message) {
         }
     }
 
-    async function enableFriendly() {
+    async function enableTroll() {
         try {
             if (message.author.bot) return;
             const gptResponse = await openai.createCompletion({
-               model: "text-davinci-003",
-               prompt:"You: What have you been up to?\nFriend: Watching old movies.\nYou: Did you watch anything interesting?\nFriend:",
-               temperature: 0.5,
-               max_tokens: 60,
-               top_p: 1.0,
-               frequency_penalty: 0.5,
-               presence_penalty: 0.0,
+                model:"text-davinci-003",
+                prompt:`Hey Give me bad response for this: ${message.content}`,
+                temperature:0.3,
+                max_tokens:100,
+                top_p:1.0,
+                frequency_penalty:0.0,
+                presence_penalty:0.0
             });
 
             message.reply(`${gptResponse.data.choices[0].text}`);
-            console.log("chatGPT_FRIENDLY CALL");
+            console.log("chatGPT_TROLL RESPONSE");
             return;
 
         } catch(error){
