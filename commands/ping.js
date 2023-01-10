@@ -3,6 +3,5 @@ module.exports = {
     description: 'Replies with Pong!',
     execute(message, args){
         message.reply(`Pong!`);
-        console.log("~~ ping CALL");
     }
 };

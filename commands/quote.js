@@ -6,7 +6,7 @@ module.exports = {
     async execute(message, args) {
         try {            
             message.reply(memer.quotes()); 
-            console.log('~~ memerAPI CALL!');
+            console.log('memerAPI CALL!');
         } catch (error) {
             console.log(error);
         }       

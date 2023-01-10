@@ -1,7 +1,9 @@
 require('dotenv').config();
 
 const fs = require('node:fs');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+
+// Setting Up ChatGPT
+const { Client, Collection, GatewayIntentBits, Presence } = require('discord.js');
 const client = new Client({ intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
@@ -16,6 +18,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+// Setting up Bot
 const prefix = '>';
 
 client.commands = new Collection();
@@ -33,6 +36,7 @@ client.once('ready', () => {
     console.log(`${client.user.tag} is online!`);
 });
 
+// Reading command
 client.on('messageCreate', async function(message) {
     // Priorities the commands startswith prefix (>) but if theres not prefix,
     // then bot would switch to AI mode
@@ -43,29 +47,29 @@ client.on('messageCreate', async function(message) {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
-    if(!client.commands.has(command)) return;
+    if (!client.commands.has(command)) return;
     client.commands.get(command).execute(message, args);
     
-    // AI SECTION
+    // ChatGPT SECTION
     async function enableAI() {
         try {
-            if(message.author.bot) return;
-    
+            if (message.author.bot) return;
             const gptResponse = await openai.createCompletion({
-                model: "davinci",
-                prompt: `smart-ape-bot is a friendly chatbot.\n\
-                smart-ape-bot: Hello, how are you?\n\
-                ${message.author.username}: ${message.content}\n\
-                smart-ape-bot:`,
-                temperature: 0.9,
-                max_tokens: 100,
-                stop: ["smart-ape-bot:", "Luckman:"],
-            })
+               model: "text-davinci-003",
+               prompt: `Hey Give me a response for this: ${message.content}`,
+               temperature: 0.5,
+               max_tokens: 60,
+               top_p: 1.0,
+               frequency_penalty: 0.5,
+               presence_penalty: 0.0,
+            });
+
             message.reply(`${gptResponse.data.choices[0].text}`);
-            console.log("~~ chatGPT CALL");
+            console.log("chatGPT CALL");
             return;
-        } catch(err){
-            console.log(err);
+
+        } catch(error){
+            console.log(error);
         }
     }
 }); 
