@@ -1,6 +1,6 @@
 require('dotenv').config();
-
 const fs = require('node:fs');
+let modeType = 0;
 
 // Setting Up ChatGPT
 const { Client, Collection, GatewayIntentBits, Presence } = require('discord.js');
@@ -38,11 +38,24 @@ client.once('ready', () => {
 
 // Reading command
 client.on('messageCreate', async function(message) {
-    // Priorities the commands startswith prefix (>) but if theres not prefix,
-    // then bot would switch to AI mode
-
     // BOT SECTION
-    if (message.author.bot || !message.content.startsWith(prefix)) enableAI();
+    if (message.author.bot || !message.content.startsWith(prefix)) {
+        if (message.content.startsWith('$info')) {
+            message.reply('Switching to Informative Mode'); 
+            modeType = 1;
+            return;
+        }
+        
+        if (message.content.startsWith('$friendly')) {
+            message.reply('Switching to Friendly Mode'); 
+            modeType = 2;
+            return;
+        }
+
+        if (modeType === 1) enableAI();
+        if (modeType === 2 || modeType === 0) enableFriendly();
+        
+    }
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
@@ -65,7 +78,29 @@ client.on('messageCreate', async function(message) {
             });
 
             message.reply(`${gptResponse.data.choices[0].text}`);
-            console.log("chatGPT CALL");
+            console.log("chatGPT_INFO CALL");
+            return;
+
+        } catch(error){
+            console.log(error);
+        }
+    }
+
+    async function enableFriendly() {
+        try {
+            if (message.author.bot) return;
+            const gptResponse = await openai.createCompletion({
+               model: "text-davinci-003",
+               prompt:"You: What have you been up to?\nFriend: Watching old movies.\nYou: Did you watch anything interesting?\nFriend:",
+               temperature: 0.5,
+               max_tokens: 60,
+               top_p: 1.0,
+               frequency_penalty: 0.5,
+               presence_penalty: 0.0,
+            });
+
+            message.reply(`${gptResponse.data.choices[0].text}`);
+            console.log("chatGPT_FRIENDLY CALL");
             return;
 
         } catch(error){
