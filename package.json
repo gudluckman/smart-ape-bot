@@ -19,6 +19,7 @@
   "homepage": "https://github.com/gudluckman/smart-ape-bot#readme",
   "dependencies": {
     "axios": "^1.2.2",
+    "clean-code-facts": "^1.0.8",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
