@@ -16,7 +16,7 @@ module.exports = {
             { name: 'Regular field title', value: 'Some value here' },
             { name: '\u200B', value: '\u200B' },
             { name: 'Inline field title', value: 'Some value here', inline: true },
-            { name: 'Inline field title', value: 'Some value here', inline: true },
+            { name: 'Inline field title', value: 'Some value here',  inline: true },
         )
         .addFields({ name: 'Inline field title', value: 'Some value here', inline: true })
         .setImage('https://i.imgur.com/AfFp7pu.png')
