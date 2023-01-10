@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
+const axios = require('axios');
 let modeType = 0;
 
 // Setting Up ChatGPT
@@ -23,7 +24,6 @@ const prefix = '>';
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -54,7 +54,6 @@ client.on('messageCreate', async function(message) {
 
         if (modeType === 1) enableAI();
         if (modeType === 2 || modeType === 0) enableFriendly();
-        
     }
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -108,6 +107,5 @@ client.on('messageCreate', async function(message) {
         }
     }
 }); 
-
 
 client.login(process.env.DISCORD_TOKEN);
