@@ -1,6 +1,5 @@
 require('dotenv').config();
 const fs = require('node:fs');
-const axios = require('axios');
 let modeType = 0;
 
 // Setting Up ChatGPT
