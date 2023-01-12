@@ -40,6 +40,12 @@ client.once('ready', () => {
 client.on('messageCreate', async function(message) {
     // BOT SECTION
     if (message.author.bot || !message.content.startsWith(prefix)) {
+        if (message.content.startsWith("$who")) {
+            if (modeType === 'TROLL') message.reply("Troll Mode in charge");
+            else message.reply("General Mode in charge");
+            return;
+        }
+
         if (message.content.startsWith('$troll')) {
             message.reply('Switching to Troll Mode'); 
             modeType = 'TROLL';
@@ -53,7 +59,7 @@ client.on('messageCreate', async function(message) {
         }
 
         if (modeType === 'TROLL') enableTroll();
-        if (modeType === 'GENERAL' || modeType === 'DEFAULT') enableAI();
+        else enableAI();
     }
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -90,7 +96,7 @@ client.on('messageCreate', async function(message) {
             if (message.author.bot) return;
             const gptResponse = await openai.createCompletion({
                 model:"text-davinci-003",
-                prompt:`Hey Give me bad response for this: ${message.content}`,
+                prompt:`Hey Give me savage response for this: ${message.content}`,
                 temperature:0.3,
                 max_tokens:100,
                 top_p:1.0,
