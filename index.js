@@ -3,11 +3,12 @@ const fs = require('node:fs');
 let modeType = 'DEFAULT';
 
 // Setting Up ChatGPT
-const { Client, Collection, GatewayIntentBits, Presence } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent,
+    
 ]})
 
 const { Configuration, OpenAIApi } = require('openai');
