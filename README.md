@@ -5,5 +5,5 @@
 ## Details
 
 - Using ChatGPT API as a discord bot feature
-- Having two AI personalities (friendly/negatively) towards our interaction
+- Having two AI personalities (friendly/negatively) towards user interaction
 - Bot includes basic bot commands like weather, embed, and more to come
